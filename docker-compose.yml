@@ -3,12 +3,13 @@ services:
     image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
     environment:
-      - POSTGRES_DB=inventario_db
-      - POSTGRES_USER=inventario_user
-      - POSTGRES_PASSWORD=inventario_pass123
-    ports:
-      - "5432:5432"
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    # ELIMINA LA SECCIÓN DE PUERTOS (ports: - "5432:5432")
 
   web:
     build: .
@@ -19,10 +20,9 @@ services:
       - "8090:8000"
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
-      - POSTGRES_DB=inventario_db
-      - POSTGRES_USER=inventario_user
-      - POSTGRES_PASSWORD=inventario_pass123
       - POSTGRES_HOST=db
 
 volumes:
