@@ -1,0 +1,186 @@
+{% extends 'inventario_app/base.html' %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'inventario:gestionar_inventario' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">✏️ Editar Repuesto: {{ repuesto.codigo_interno }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h5 class="border-bottom pb-2 mb-3">📋 Información Básica</h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Código Interno</label>
+                            <input type="text" class="form-control" value="{{ repuesto.codigo_interno }}" disabled>
+                            <small class="text-muted">No se puede modificar</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre del Ítem *</label>
+                            <input type="text" name="nombre" class="form-control" value="{{ repuesto.nombre }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Categoría *</label>
+                            <select name="categoria" class="form-select" required>
+                                {% for cat in categorias %}
+                                    <option value="{{ cat.pk }}" {% if cat.pk == repuesto.categoria.pk %}selected{% endif %}>
+                                        {{ cat }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nº Parte HAAS</label>
+                            <input type="text" name="numero_parte_haas" class="form-control" value="{{ repuesto.numero_parte_haas }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Fabricante</label>
+                        <input type="text" name="fabricante" class="form-control" value="{{ repuesto.fabricante }}">
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3 mt-4">📦 Stock y Ubicación</h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Stock Actual</label>
+                            <input type="number" name="stock_actual" class="form-control" value="{{ repuesto.stock_actual }}" min="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Stock Mínimo</label>
+                            <input type="number" name="stock_minimo" class="form-control" value="{{ repuesto.stock_minimo }}" min="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                <option value="nuevo" {% if repuesto.estado == 'nuevo' %}selected{% endif %}>Nuevo</option>
+                                <option value="usado" {% if repuesto.estado == 'usado' %}selected{% endif %}>Usado (Operativo)</option>
+                                <option value="malo" {% if repuesto.estado == 'malo' %}selected{% endif %}>Malo/Para Reparar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ubicación Física</label>
+                        <input type="text" name="ubicacion" class="form-control" value="{{ repuesto.ubicacion }}">
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3 mt-4">📷 Imagen</h5>
+                    
+                    {% if repuesto.imagen %}
+                    <div class="mb-3">
+                        <img src="{{ repuesto.imagen.url }}" alt="{{ repuesto.nombre }}" class="img-thumbnail" style="max-height: 200px;">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Cambiar Foto (opcional)</label>
+                        <input type="file" name="imagen" class="form-control" accept="image/*" capture="environment">
+                        <small class="text-muted">Deja vacío para mantener la imagen actual</small>
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3 mt-4">⚙️ Especificaciones Técnicas</h5>
+                    
+                    <div id="parametros-container">
+                        {% for param in parametros %}
+                        <div class="row mb-2 parametro-row">
+                            <div class="col-md-4">
+                                <input type="text" name="param_nombre[]" class="form-control" value="{{ param.nombre }}" placeholder="Nombre">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="param_valor[]" class="form-control" value="{{ param.valor }}" placeholder="Valor">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="param_unidad[]" class="form-control" value="{{ param.unidad }}" placeholder="Unidad">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-outline-danger btn-remove" onclick="eliminarParametro(this)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="row mb-2 parametro-row">
+                            <div class="col-md-4">
+                                <input type="text" name="param_nombre[]" class="form-control" placeholder="Nombre">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="param_valor[]" class="form-control" placeholder="Valor">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="param_unidad[]" class="form-control" placeholder="Unidad">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-outline-danger btn-remove" onclick="eliminarParametro(this)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <button type="button" class="btn btn-outline-secondary btn-sm mb-3" onclick="agregarParametro()">
+                        <i class="bi bi-plus-circle"></i> Agregar Parámetro
+                    </button>
+
+                    <hr class="my-4">
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning btn-lg">
+                            <i class="bi bi-check-circle"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function agregarParametro() {
+    const container = document.getElementById('parametros-container');
+    const newRow = document.createElement('div');
+    newRow.className = 'row mb-2 parametro-row';
+    newRow.innerHTML = `
+        <div class="col-md-4">
+            <input type="text" name="param_nombre[]" class="form-control" placeholder="Nombre">
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="param_valor[]" class="form-control" placeholder="Valor">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="param_unidad[]" class="form-control" placeholder="Unidad">
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-outline-danger btn-remove" onclick="eliminarParametro(this)">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    `;
+    container.appendChild(newRow);
+}
+
+function eliminarParametro(btn) {
+    const row = btn.closest('.parametro-row');
+    if (document.querySelectorAll('.parametro-row').length > 1) {
+        row.remove();
+    } else {
+        alert('Debe haber al menos un campo de parámetro');
+    }
+}
+</script>
+{% endblock %}

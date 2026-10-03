@@ -1,0 +1,89 @@
+{% extends 'inventario_app/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>⚙️ Gestionar Inventario</h2>
+    <a href="{% url 'inventario:crear_repuesto' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Nuevo Repuesto
+    </a>
+</div>
+
+<div class="alert alert-warning">
+    <i class="bi bi-shield-lock"></i> <strong>Modo Administrador:</strong> Puedes crear, editar y eliminar repuestos.
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Buscar</label>
+                <input type="text" name="q" class="form-control" placeholder="Nombre, código o HAAS..." value="{{ busqueda }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Categoría</label>
+                <select name="categoria" class="form-select">
+                    <option value="">Todas las categorías</option>
+                    {% for cat in categorias %}
+                        <option value="{{ cat.id }}" {% if categoria_actual == cat.id|stringformat:"s" %}selected{% endif %}>
+                            {{ cat }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-secondary me-2">
+                    <i class="bi bi-search"></i> Filtrar
+                </button>
+                <a href="{% url 'inventario:gestionar_inventario' %}" class="btn btn-outline-secondary">Limpiar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for repuesto in repuestos %}
+            <tr>
+                <td><code>{{ repuesto.codigo_interno }}</code></td>
+                <td>{{ repuesto.nombre }}</td>
+                <td>{{ repuesto.categoria }}</td>
+                <td>
+                    {% if repuesto.necesita_reabastecimiento %}
+                        <span class="stock-bajo">{{ repuesto.stock_actual }}</span>
+                    {% else %}
+                        {{ repuesto.stock_actual }}
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'inventario:detalle_repuesto' repuesto.pk %}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a href="{% url 'inventario:editar_repuesto' repuesto.pk %}" class="btn btn-sm btn-outline-warning">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a href="{% url 'inventario:eliminar_repuesto' repuesto.pk %}" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted py-4">
+                    No se encontraron repuestos
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

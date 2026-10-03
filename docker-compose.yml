@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=inventario_db
+      - POSTGRES_USER=inventario_user
+      - POSTGRES_PASSWORD=inventario_pass123
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8090:8000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_DB=inventario_db
+      - POSTGRES_USER=inventario_user
+      - POSTGRES_PASSWORD=inventario_pass123
+      - POSTGRES_HOST=db
+
+volumes:
+  postgres_data:

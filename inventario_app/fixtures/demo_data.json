@@ -1,0 +1,320 @@
+﻿[
+{
+  "model": "inventario_app.categoria",
+  "pk": 1,
+  "fields": {
+    "nombre": "Electronica",
+    "descripcion": "Electr├│nica",
+    "padre": null,
+    "prefijo_codigo": "ELCT"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 2,
+  "fields": {
+    "nombre": "Electricidad",
+    "descripcion": "",
+    "padre": null,
+    "prefijo_codigo": "ELEC"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 3,
+  "fields": {
+    "nombre": "Cables",
+    "descripcion": "Cables armados",
+    "padre": 2,
+    "prefijo_codigo": "CABL"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 4,
+  "fields": {
+    "nombre": "Servomotores",
+    "descripcion": "",
+    "padre": 2,
+    "prefijo_codigo": "SERV"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 5,
+  "fields": {
+    "nombre": "Motores Trifasicos",
+    "descripcion": "",
+    "padre": 2,
+    "prefijo_codigo": "MOT"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 6,
+  "fields": {
+    "nombre": "Ventiladores",
+    "descripcion": "",
+    "padre": 2,
+    "prefijo_codigo": "VENT"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 7,
+  "fields": {
+    "nombre": "Modulos IGBT",
+    "descripcion": "",
+    "padre": 1,
+    "prefijo_codigo": "IGBT"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 8,
+  "fields": {
+    "nombre": "Mecanica",
+    "descripcion": "",
+    "padre": null,
+    "prefijo_codigo": "MECH"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 9,
+  "fields": {
+    "nombre": "Rodamientos",
+    "descripcion": "",
+    "padre": 8,
+    "prefijo_codigo": "ROD"
+  }
+},
+{
+  "model": "inventario_app.categoria",
+  "pk": 10,
+  "fields": {
+    "nombre": "Control",
+    "descripcion": "",
+    "padre": 1,
+    "prefijo_codigo": "CTRL"
+  }
+},
+{
+  "model": "inventario_app.repuesto",
+  "pk": 4,
+  "fields": {
+    "nombre": "Cable Potencia Servomotor",
+    "codigo_interno": "ELEC-CABL-0001",
+    "categoria": 3,
+    "numero_parte_haas": "32-1534C",
+    "fabricante": "Haas",
+    "numero_serie": "",
+    "stock_actual": 2,
+    "stock_minimo": 0,
+    "ubicacion": "Estante A",
+    "estado": "nuevo",
+    "imagen": "repuestos/s-l1200_YJtwdiY.jpg",
+    "especificaciones": {},
+    "valor_unitario": "0.00",
+    "proveedor_ultima_compra": "",
+    "fecha_ultima_compra": null,
+    "creado_por": 1,
+    "fecha_creacion": "2026-09-30T20:09:34.340Z",
+    "fecha_actualizacion": "2026-09-30T20:09:34.340Z"
+  }
+},
+{
+  "model": "inventario_app.repuesto",
+  "pk": 5,
+  "fields": {
+    "nombre": "Placa Maincon Procesador 4300E ",
+    "codigo_interno": "ELCT-CTRL-0001",
+    "categoria": 10,
+    "numero_parte_haas": "65-4300E ",
+    "fabricante": "Haas",
+    "numero_serie": "",
+    "stock_actual": 2,
+    "stock_minimo": 0,
+    "ubicacion": "Estante B",
+    "estado": "nuevo",
+    "imagen": "repuestos/4300E.jpg",
+    "especificaciones": {},
+    "valor_unitario": "0.00",
+    "proveedor_ultima_compra": "",
+    "fecha_ultima_compra": null,
+    "creado_por": 1,
+    "fecha_creacion": "2026-09-30T20:12:38.676Z",
+    "fecha_actualizacion": "2026-10-01T16:02:01.534Z"
+  }
+},
+{
+  "model": "inventario_app.repuesto",
+  "pk": 6,
+  "fields": {
+    "nombre": "Motor Trifasico VF-3",
+    "codigo_interno": "ELEC-MOT-0001",
+    "categoria": 5,
+    "numero_parte_haas": "N/A",
+    "fabricante": "Lincoln",
+    "numero_serie": "",
+    "stock_actual": 1,
+    "stock_minimo": 0,
+    "ubicacion": "Estante B",
+    "estado": "nuevo",
+    "imagen": "repuestos/s-l1600_6tMVL7v.jpg",
+    "especificaciones": {},
+    "valor_unitario": "0.00",
+    "proveedor_ultima_compra": "",
+    "fecha_ultima_compra": null,
+    "creado_por": 1,
+    "fecha_creacion": "2026-10-01T16:04:53.606Z",
+    "fecha_actualizacion": "2026-10-01T16:04:53.606Z"
+  }
+},
+{
+  "model": "inventario_app.repuesto",
+  "pk": 7,
+  "fields": {
+    "nombre": "Servomotor Yaskawa SGMGV-13ADA6C",
+    "codigo_interno": "ELEC-SERV-0001",
+    "categoria": 4,
+    "numero_parte_haas": "93-1930 ",
+    "fabricante": "Yaskawa",
+    "numero_serie": "",
+    "stock_actual": 2,
+    "stock_minimo": 0,
+    "ubicacion": "Estante A",
+    "estado": "nuevo",
+    "imagen": "repuestos/16667475291655027_TzIttXF.jpg",
+    "especificaciones": {},
+    "valor_unitario": "0.00",
+    "proveedor_ultima_compra": "",
+    "fecha_ultima_compra": null,
+    "creado_por": 1,
+    "fecha_creacion": "2026-10-01T16:06:29.108Z",
+    "fecha_actualizacion": "2026-10-01T16:06:29.108Z"
+  }
+},
+{
+  "model": "inventario_app.repuesto",
+  "pk": 8,
+  "fields": {
+    "nombre": "Amplificador Servo Haas 30A",
+    "codigo_interno": "ELCT-0002",
+    "categoria": 1,
+    "numero_parte_haas": "93-32-5550J",
+    "fabricante": "Haas",
+    "numero_serie": "",
+    "stock_actual": 1,
+    "stock_minimo": 0,
+    "ubicacion": "CAJA 2",
+    "estado": "nuevo",
+    "imagen": "repuestos/s-l9603_Z3Mms9x.jpg",
+    "especificaciones": {},
+    "valor_unitario": "0.00",
+    "proveedor_ultima_compra": "",
+    "fecha_ultima_compra": null,
+    "creado_por": 1,
+    "fecha_creacion": "2026-10-01T16:07:45.248Z",
+    "fecha_actualizacion": "2026-10-01T16:07:45.248Z"
+  }
+},
+{
+  "model": "inventario_app.repuesto",
+  "pk": 9,
+  "fields": {
+    "nombre": "V├ílvula Check con Hilo BSP de 1/4",
+    "codigo_interno": "MECH-0001",
+    "categoria": 8,
+    "numero_parte_haas": "n/a",
+    "fabricante": "prodalan",
+    "numero_serie": "",
+    "stock_actual": 3,
+    "stock_minimo": 0,
+    "ubicacion": "Caja 3",
+    "estado": "nuevo",
+    "imagen": "repuestos/WA000604_20210825184156.jpg",
+    "especificaciones": {},
+    "valor_unitario": "0.00",
+    "proveedor_ultima_compra": "",
+    "fecha_ultima_compra": null,
+    "creado_por": 1,
+    "fecha_creacion": "2026-10-01T16:10:16.475Z",
+    "fecha_actualizacion": "2026-10-01T16:10:16.475Z"
+  }
+},
+{
+  "model": "inventario_app.repuesto",
+  "pk": 11,
+  "fields": {
+    "nombre": "Capacitor Motor 4uF",
+    "codigo_interno": "ELEC-0002",
+    "categoria": 2,
+    "numero_parte_haas": "n/a",
+    "fabricante": "WERDEN",
+    "numero_serie": "",
+    "stock_actual": 2,
+    "stock_minimo": 0,
+    "ubicacion": "Caja 4",
+    "estado": "nuevo",
+    "imagen": "repuestos/condensadores-para-motor-de-4-microfaradios_m_p3zEIse.jpg",
+    "especificaciones": {},
+    "valor_unitario": "0.00",
+    "proveedor_ultima_compra": "",
+    "fecha_ultima_compra": null,
+    "creado_por": 1,
+    "fecha_creacion": "2026-10-01T16:12:56.945Z",
+    "fecha_actualizacion": "2026-10-01T16:12:56.945Z"
+  }
+},
+{
+  "model": "inventario_app.parametrorepuesto",
+  "pk": 2,
+  "fields": {
+    "repuesto": 4,
+    "nombre": "Largo",
+    "valor": "8",
+    "unidad": "Metros"
+  }
+},
+{
+  "model": "inventario_app.parametrorepuesto",
+  "pk": 3,
+  "fields": {
+    "repuesto": 6,
+    "nombre": "Potencia",
+    "valor": "7.5",
+    "unidad": "HP"
+  }
+},
+{
+  "model": "inventario_app.parametrorepuesto",
+  "pk": 4,
+  "fields": {
+    "repuesto": 8,
+    "nombre": "Potencia",
+    "valor": "30",
+    "unidad": "A"
+  }
+},
+{
+  "model": "inventario_app.parametrorepuesto",
+  "pk": 5,
+  "fields": {
+    "repuesto": 9,
+    "nombre": "medida",
+    "valor": "1/4",
+    "unidad": "pulgadas"
+  }
+},
+{
+  "model": "inventario_app.parametrorepuesto",
+  "pk": 6,
+  "fields": {
+    "repuesto": 11,
+    "nombre": "Capacitancia",
+    "valor": "4",
+    "unidad": "uF"
+  }
+}
+]

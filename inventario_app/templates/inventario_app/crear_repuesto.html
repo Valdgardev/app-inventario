@@ -1,0 +1,155 @@
+{% extends 'inventario_app/base.html' %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'inventario:gestionar_inventario' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">➕ Crear Nuevo Repuesto</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h5 class="border-bottom pb-2 mb-3">📋 Información Básica</h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre del Ítem *</label>
+                            <input type="text" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Categoría *</label>
+                            <select name="categoria" class="form-select" required>
+                                <option value="">Selecciona una categoría...</option>
+                                {% for cat in categorias %}
+                                    <option value="{{ cat.pk }}">{{ cat }}</option>
+                                {% endfor %}
+                            </select>
+                            <small class="text-muted">El código se generará automáticamente</small>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nº Parte HAAS</label>
+                            <input type="text" name="numero_parte_haas" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fabricante</label>
+                            <input type="text" name="fabricante" class="form-control">
+                        </div>
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3 mt-4">📦 Stock y Ubicación</h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Stock Actual</label>
+                            <input type="number" name="stock_actual" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Stock Mínimo</label>
+                            <input type="number" name="stock_minimo" class="form-control" value="0" min="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Estado</label>
+                            <select name="estado" class="form-select">
+                                <option value="nuevo">Nuevo</option>
+                                <option value="usado">Usado (Operativo)</option>
+                                <option value="malo">Malo/Para Reparar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ubicación Física</label>
+                        <input type="text" name="ubicacion" class="form-control" placeholder="Ej: Estante A, Cajón 3">
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3 mt-4">📷 Imagen</h5>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Foto del Repuesto</label>
+                        <input type="file" name="imagen" class="form-control" accept="image/*" capture="environment">
+                        <small class="text-muted">Puedes tomar una foto con la cámara o subir desde galería</small>
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3 mt-4">⚙️ Especificaciones Técnicas</h5>
+                    
+                    <div id="parametros-container">
+                        <div class="row mb-2 parametro-row">
+                            <div class="col-md-4">
+                                <input type="text" name="param_nombre[]" class="form-control" placeholder="Nombre (ej: Voltaje)">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="param_valor[]" class="form-control" placeholder="Valor (ej: 24)">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="param_unidad[]" class="form-control" placeholder="Unidad (ej: V)">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-outline-danger btn-remove" onclick="eliminarParametro(this)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-outline-secondary btn-sm mb-3" onclick="agregarParametro()">
+                        <i class="bi bi-plus-circle"></i> Agregar Parámetro
+                    </button>
+
+                    <hr class="my-4">
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle"></i> Crear Repuesto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function agregarParametro() {
+    const container = document.getElementById('parametros-container');
+    const newRow = document.createElement('div');
+    newRow.className = 'row mb-2 parametro-row';
+    newRow.innerHTML = `
+        <div class="col-md-4">
+            <input type="text" name="param_nombre[]" class="form-control" placeholder="Nombre (ej: Voltaje)">
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="param_valor[]" class="form-control" placeholder="Valor (ej: 24)">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="param_unidad[]" class="form-control" placeholder="Unidad (ej: V)">
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-outline-danger btn-remove" onclick="eliminarParametro(this)">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    `;
+    container.appendChild(newRow);
+}
+
+function eliminarParametro(btn) {
+    const row = btn.closest('.parametro-row');
+    if (document.querySelectorAll('.parametro-row').length > 1) {
+        row.remove();
+    } else {
+        alert('Debe haber al menos un campo de parámetro');
+    }
+}
+</script>
+{% endblock %}

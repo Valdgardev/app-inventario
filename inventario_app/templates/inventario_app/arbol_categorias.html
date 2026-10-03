@@ -1,0 +1,120 @@
+{% extends 'inventario_app/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📂 Árbol de Categorías</h2>
+    <a href="{% url 'inventario:lista_repuestos' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Volver al Inventario
+    </a>
+</div>
+
+<div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> Haz clic en cualquier categoría para ver los repuestos que contiene.
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-diagram-3"></i> Estructura de Categorías</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    {% for categoria in categorias_padre %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    {% if categoria.subcategorias.all %}
+                                        <button class="btn btn-sm btn-link me-2" 
+                                                data-bs-toggle="collapse" 
+                                                data-bs-target="#subcats-{{ categoria.id }}">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </button>
+                                    {% else %}
+                                        <span class="me-4"></span>
+                                    {% endif %}
+                                    
+                                    <i class="bi bi-folder-fill text-warning me-2 fs-4"></i>
+                                    <div>
+                                        <a href="{% url 'inventario:lista_repuestos' %}?categoria={{ categoria.id }}" 
+                                           class="text-decoration-none fw-bold fs-5">
+                                            {{ categoria.nombre }}
+                                        </a>
+                                        {% if categoria.descripcion %}
+                                            <p class="text-muted small mb-0">{{ categoria.descripcion }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-secondary me-2">
+                                        {{ categoria.total_repuestos }} repuesto{{ categoria.total_repuestos|pluralize }}
+                                    </span>
+                                    <a href="{% url 'inventario:lista_repuestos' %}?categoria={{ categoria.id }}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Ver
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            {% if categoria.subcategorias.all %}
+                                <div class="collapse mt-3" id="subcats-{{ categoria.id }}">
+                                    <div class="ms-4 border-start ps-3">
+                                        {% for subcat in categoria.subcategorias.all %}
+                                            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="bi bi-folder text-secondary me-2"></i>
+                                                    <a href="{% url 'inventario:lista_repuestos' %}?categoria={{ subcat.id }}" 
+                                                       class="text-decoration-none">
+                                                        {{ subcat.nombre }}
+                                                    </a>
+                                                </div>
+                                                
+                                                <div class="d-flex align-items-center">
+                                                    <span class="badge bg-light text-dark me-2">
+                                                        {{ subcat.total_repuestos }} repuesto{{ subcat.total_repuestos|pluralize }}
+                                                    </span>
+                                                    <a href="{% url 'inventario:lista_repuestos' %}?categoria={{ subcat.id }}" 
+                                                       class="btn btn-sm btn-outline-secondary">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <div class="list-group-item text-center text-muted py-5">
+                            <i class="bi bi-folder-x fs-1 d-block mb-3"></i>
+                            <p class="mb-0">No hay categorías creadas aún</p>
+                            <a href="/admin/inventario_app/categoria/add/" class="btn btn-primary mt-3">
+                                <i class="bi bi-plus-circle"></i> Crear Primera Categoría
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5><i class="bi bi-bar-chart"></i> Resumen</h5>
+                <hr>
+                <div class="mb-3">
+                    <strong>Total de Categorías:</strong>
+                    <span class="float-end badge bg-primary fs-6">{{ categorias_padre|length }}</span>
+                </div>
+                <hr>
+                <p class="text-muted small mb-0">
+                    <i class="bi bi-lightbulb"></i> Tip: Puedes crear categorías desde el 
+                    <a href="/admin/inventario_app/categoria/">Panel Admin</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

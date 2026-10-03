@@ -1,0 +1,51 @@
+{% extends 'inventario_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">⚠️ Confirmar Eliminación</h4>
+            </div>
+            <div class="card-body text-center">
+                <p class="fs-5">¿Estás seguro de que quieres eliminar esta categoría?</p>
+                
+                <div class="alert alert-warning">
+                    <strong>{{ categoria.nombre }}</strong>
+                    {% if categoria.prefijo_codigo %}
+                        <br><small>Prefijo: <code>{{ categoria.prefijo_codigo }}</code></small>
+                    {% endif %}
+                </div>
+                
+                {% if tiene_subcategorias %}
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle"></i> <strong>No se puede eliminar:</strong> 
+                        Esta categoría tiene subcategorías asociadas. Elimínalas primero.
+                    </div>
+                {% elif tiene_repuestos %}
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle"></i> <strong>No se puede eliminar:</strong> 
+                        Esta categoría tiene repuestos asociados. Mueve o elimina primero los repuestos.
+                    </div>
+                {% else %}
+                    <p class="text-muted">Esta categoría no tiene subcategorías ni repuestos asociados.</p>
+                {% endif %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'inventario:gestionar_categorias' %}" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        {% if not tiene_subcategorias and not tiene_repuestos %}
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="bi bi-trash"></i> Sí, Eliminar
+                            </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'inventario_app/base.html' %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'inventario:gestionar_categorias' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">➕ Crear Nueva Categoría</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nombre de la Categoría *</label>
+                        <input type="text" name="nombre" class="form-control form-control-lg" required placeholder="Ej: Hidráulica, Servomotores, Rodamientos">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Categoría Padre</label>
+                        <select name="padre" class="form-select">
+                            <option value="">— Ninguna (será categoría principal) —</option>
+                            {% for cat in categorias_padre %}
+                                <option value="{{ cat.pk }}">{{ cat.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Déjalo vacío si es una categoría principal</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Prefijo de Código</label>
+                        <input type="text" name="prefijo_codigo" class="form-control" maxlength="10" placeholder="Ej: HID, SERV, ROD" style="text-transform: uppercase;">
+                        <small class="text-muted">Se usará para generar códigos automáticos (ej: HID-VAL-0001). Máximo 10 caracteres.</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Descripción</label>
+                        <textarea name="descripcion" class="form-control" rows="3" placeholder="Descripción opcional de la categoría..."></textarea>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> <strong>Ejemplos de estructura:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li><strong>Categoría principal:</strong> Hidráulica (prefijo: HID)</li>
+                            <li><strong>Subcategoría:</strong> Válvulas (padre: Hidráulica, prefijo: VAL) → Código resultante: HID-VAL-0001</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle"></i> Crear Categoría
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

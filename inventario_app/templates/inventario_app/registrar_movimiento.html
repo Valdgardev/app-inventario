@@ -1,0 +1,107 @@
+{% extends 'inventario_app/base.html' %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'inventario:lista_repuestos' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Volver al inventario
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">📝 Registrar Movimiento de Stock</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="repuesto" class="form-label">Repuesto</label>
+                        <select name="repuesto" id="repuesto" class="form-select" required>
+                            <option value="">Selecciona un repuesto...</option>
+                            {% for repuesto in repuestos %}
+                                <option value="{{ repuesto.pk }}">
+                                    {{ repuesto.codigo_interno }} - {{ repuesto.nombre }} (Stock: {{ repuesto.stock_actual }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Movimiento</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="tipo" id="tipo_entrada" value="entrada" required>
+                            <label class="btn btn-outline-success" for="tipo_entrada">
+                                <i class="bi bi-arrow-down-circle"></i> Entrada
+                            </label>
+
+                            <input type="radio" class="btn-check" name="tipo" id="tipo_salida" value="salida">
+                            <label class="btn btn-outline-danger" for="tipo_salida">
+                                <i class="bi bi-arrow-up-circle"></i> Salida
+                            </label>
+
+                            <input type="radio" class="btn-check" name="tipo" id="tipo_ajuste" value="ajuste">
+                            <label class="btn btn-outline-info" for="tipo_ajuste">
+                                <i class="bi bi-pencil-square"></i> Ajuste
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input type="number" name="cantidad" id="cantidad" class="form-control" min="1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="notas" class="form-label">Notas (opcional)</label>
+                        <textarea name="notas" id="notas" class="form-control" rows="3" placeholder="Ej: Máquina CNC #3, cambio de válvula"></textarea>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle"></i> Registrar Movimiento
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /* Botones de tipo de movimiento - estado seleccionado */
+    .btn-check:checked + .btn-outline-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+        font-weight: bold;
+    }
+    .btn-check:checked + .btn-outline-danger {
+        background-color: #DC3545;
+        border-color: #DC3545;
+        color: white;
+        font-weight: bold;
+    }
+    .btn-check:checked + .btn-outline-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: white;
+        font-weight: bold;
+    }
+    
+    /* Hover mejorado */
+    .btn-outline-success:hover {
+        background-color: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+    }
+    .btn-outline-danger:hover {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: #DC3545;
+    }
+    .btn-outline-info:hover {
+        background-color: rgba(23, 162, 184, 0.1);
+        color: #17a2b8;
+    }
+</style>
+{% endblock %}

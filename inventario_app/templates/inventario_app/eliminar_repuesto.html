@@ -1,0 +1,36 @@
+{% extends 'inventario_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">⚠️ Confirmar Eliminación</h4>
+            </div>
+            <div class="card-body text-center">
+                <p class="fs-5">¿Estás seguro de que quieres eliminar este repuesto?</p>
+                
+                <div class="alert alert-warning">
+                    <strong>{{ repuesto.codigo_interno }}</strong><br>
+                    {{ repuesto.nombre }}<br>
+                    <small>Stock actual: {{ repuesto.stock_actual }}</small>
+                </div>
+                
+                <p class="text-danger"><strong>Esta acción no se puede deshacer</strong></p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'inventario:gestionar_inventario' %}" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="bi bi-trash"></i> Sí, Eliminar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

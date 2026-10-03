@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etiqueta - {{ repuesto.codigo_interno }}</title>
+    <style>
+        /* Estilos para pantalla */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .controls {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-print {
+    background: #DC3545;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+.btn-print:hover {
+    background: #C82333;
+}
+        .btn-back {
+            background: #6c757d;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        /* Estilos de la etiqueta */
+        .etiqueta {
+            width: 90mm;
+            height: 30mm;
+            background: white;
+            border: 2px solid #000;
+            padding: 3mm;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .etiqueta-info {
+            flex: 1;
+            padding-right: 5mm;
+        }
+        .etiqueta-codigo {
+            font-size: 14pt;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 2mm;
+            word-break: break-all;
+        }
+        .etiqueta-nombre {
+            font-size: 9pt;
+            color: #333;
+            line-height: 1.2;
+        }
+        .etiqueta-qr {
+            width: 22mm;
+            height: 22mm;
+            flex-shrink: 0;
+        }
+        .etiqueta-qr img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Estilos para impresión */
+        @media print {
+            @page {
+                size: 90mm 30mm;
+                margin: 0;
+            }
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            .controls {
+                display: none !important;
+            }
+            .etiqueta {
+                margin: 0;
+                border: none;
+                page-break-after: always;
+            }
+            .etiqueta:last-child {
+                page-break-after: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Controles (solo visibles en pantalla) -->
+    <div class="controls">
+        <h2>Vista Previa de Etiqueta</h2>
+        <p><strong>Repuesto:</strong> {{ repuesto.nombre }}</p>
+        <p><strong>Código:</strong> {{ repuesto.codigo_interno }}</p>
+        <button onclick="window.print()" class="btn-print">
+            🖨️ Imprimir Etiqueta
+        </button>
+        <a href="{% url 'inventario:detalle_repuesto' repuesto.pk %}" class="btn-back">
+            ← Volver
+        </a>
+    </div>
+
+    <!-- La etiqueta -->
+    <div class="etiqueta">
+        <div class="etiqueta-info">
+            <div class="etiqueta-codigo">{{ repuesto.codigo_interno }}</div>
+            <div class="etiqueta-nombre">{{ repuesto.nombre|truncatechars:50 }}</div>
+        </div>
+        <div class="etiqueta-qr">
+            <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code">
+        </div>
+    </div>
+</body>
+</html>
