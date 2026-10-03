@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import F
+from django.db import transaction
 
 
 class Categoria(models.Model):
@@ -213,6 +215,31 @@ class MovimientoStock(models.Model):
     notas = models.TextField(blank=True, verbose_name='Notas')
     fecha = models.DateTimeField(auto_now_add=True, verbose_name='Fecha y Hora')
     
+    class Meta:
+        verbose_name = 'Movimiento de Stock'
+        verbose_name_plural = 'Movimientos de Stock'
+        ordering = ['-fecha']
+    
+    def __str__(self):
+        return f"{self.get_tipo_display()} - {self.repuesto.codigo_interno} ({self.cantidad})"
+    
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        """Actualiza el stock automáticamente de forma segura (atómica)"""
+        # 1. Guardamos el movimiento primero en la base de datos
+        super().save(*args, **kwargs)
+        
+        # 2. Actualizamos el stock de forma atómica (evita que 2 usuarios lo pisoteen)
+        if self.tipo == 'entrada':
+            Repuesto.objects.filter(pk=self.repuesto_id).update(stock_actual=F('stock_actual') + self.cantidad)
+        elif self.tipo == 'salida':
+            Repuesto.objects.filter(pk=self.repuesto_id).update(stock_actual=F('stock_actual') - self.cantidad)
+        elif self.tipo == 'ajuste':
+            Repuesto.objects.filter(pk=self.repuesto_id).update(stock_actual=self.cantidad)
+        
+        # 3. Refrescamos el objeto en memoria por si se usa después en el código
+        self.repuesto.refresh_from_db()
+        
     class Meta:
         verbose_name = 'Movimiento de Stock'
         verbose_name_plural = 'Movimientos de Stock'
