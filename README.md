@@ -21,5 +21,5 @@ Sistema web de gestión de inventario para repuestos CNC, desarrollado con Djang
 
 1. Clonar el repositorio:
 ```bash
-git clone https://github.com/TU-USUARIO/app-inventario.git
+git clone https://github.com/Valdgardev/app-inventario.git
 cd app-inventario
